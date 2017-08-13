@@ -1,0 +1,6 @@
+h1 New Ticket
+= form_for [:admin, @event, @ticket] do |f|
+  = render partial: 'form', locals: { f: f }
+  .form-group
+    = f.submit 'Create', class: 'btn btn-primary'
+    = link_to 'Cancel', admin_event_tickets_path(@event)

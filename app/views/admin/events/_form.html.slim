@@ -1,0 +1,51 @@
+- if @event.errors.any?
+  #error_explanation
+    / h2
+    /   = pluralize(@event.errors.count, "error")
+    /   |  prohibited this person from being saved:
+    ul
+      - @event.errors.full_messages.each do |msg|
+        li
+          = msg
+.form-group
+  = f.label :name
+  = f.text_field :name, :class => "form-control"
+.form-group
+  = f.label :friendly_id
+  = f.text_field :friendly_id, required: true, class: 'form-control'
+  p.help-block 限小写英数字及横线，将作为网址的一部分
+.form-group
+  => f.label :status
+  .btn-group [data-toggle='buttons']
+    - Event::STATUS.each do |status|
+      | <label class="btn btn-default 
+      = (status == f.object.status) ? 'active' : ''
+      | "> 
+      = f.radio_button :status, status
+      = t(status, scope: 'event.status')
+      | </label>
+.form-group
+  = f.label :category_id
+  = f.select :category_id, Category.all.map{ |c| [c.name, c.id] }, {}, class: 'form-control'
+.form-group
+  = f.label :description
+  = f.text_area :description, :class => "form-control"
+
+= f.nested_fields_for :tickets do |ff|
+  fieldset[style='border-left: 5px solid #bbb; margin-bottom: 10px; padding: 10px;']
+    legend Ticket
+    .form_group
+      = ff.label :name
+      = ff.text_field :name, class: 'form-control'
+    .form_group
+      = ff.label :price
+      = ff.number_field :price, class: 'form-control'
+    .form_group
+      = ff.label :description
+      = ff.text_field :description, class: 'form-control'
+  = ff.remove_nested_fields_link '移除这个票种', class: 'btn btn-danger'
+p.text-right
+  = f.add_nested_fields_link :tickets, '新增票种', class: 'btn btn-default'
+
+coffee:
+  $('#event_category_id').select2 theme: 'bootstrap'

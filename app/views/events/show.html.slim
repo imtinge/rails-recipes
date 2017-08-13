@@ -1,0 +1,4 @@
+h1 = @event.name
+h2 = t(@event.status, scope: 'event.status')
+h2 = @event.category.try(:name)
+= simple_format @event.description

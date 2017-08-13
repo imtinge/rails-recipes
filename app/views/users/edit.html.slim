@@ -1,0 +1,31 @@
+h2 Edit user
+= form_for @user do |f|
+  .form-group
+    = f.label :time_zone
+    = f.time_zone_select :time_zone
+
+  = f.fields_for  :profile do |ff|
+    .form-group
+      = ff.label :legal_name
+      = ff.text_field :legal_name, class: 'form-control'
+    .form-group
+      = ff.label :birthday
+      = ff.date_field :birthday, :class => "form-control"
+    .form-group
+      = ff.label :location
+      = ff.text_field :location, class: 'form-control'
+    .form-group
+      = ff.label :education
+      = ff.text_field :education, class: 'form-control'
+    .form-group
+      = ff.label :occupation
+      = ff.text_field :occupation, class: 'form-control'
+    .form-group
+      = ff.label :bio
+      = ff.text_field :bio, class: 'form-control'
+    .form-group
+      = ff.label :specialty
+      = ff.text_field :specialty, class: 'form-control'
+
+  .form-group
+    = f.submit 'Save', class: 'btn btn-primary'

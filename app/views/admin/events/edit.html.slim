@@ -1,0 +1,7 @@
+h1
+  | Edit Event
+= form_for [:admin, @event] do |f|
+  = render :partial => "form", :locals => { :f => f }
+  .form-group
+    = f.submit "Update", :class => "btn btn-primary"
+    = link_to "Cancel", admin_events_path

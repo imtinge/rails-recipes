@@ -1,0 +1,13 @@
+h1  我的个人资料 
+
+p Email:
+= @user.email
+br
+p Timezone:
+= @user.time_zone
+br
+p Birthday:
+= @user.profile.birthday
+br
+p Bio:
+= simple_format @user.profile.bio

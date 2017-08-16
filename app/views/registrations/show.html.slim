@@ -1,0 +1,16 @@
+h1 = @event.name
+h2 报名资料
+
+dl
+  dt 状态
+  dd = t(@registration.status, scope: 'registration.status')
+  dt 姓名
+  dd = @registration.name
+  dt E-mail
+  dd = @registration.email
+  dt 电话 
+  dd = @registration.cellphone
+  dt 网站
+  dd = @registration.website
+  dt 自我介绍 
+  dd = simple_format @registration.bio

@@ -2,4 +2,4 @@ h1
   = @event.name
 p
   = link_to "打開前台", event_path(@event), :target => "_blank", :class => "btn btn-primary"
-= simple_format @event.description
+= sanitize @event.description

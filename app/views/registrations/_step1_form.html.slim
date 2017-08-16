@@ -1,0 +1,5 @@
+  .form-group
+    = f.label :ticket_id
+    = f.select :ticket_id, @event.tickets.map { |t| [t.name, t.id] }, {}, class: 'form-control'
+  .form-group
+    = f.submit 'Save and Next', class: 'btn btn-primary'

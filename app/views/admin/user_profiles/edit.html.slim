@@ -5,7 +5,7 @@ h2 Edit User Profile
     = f.text_field :legal_name, class: 'form-control'
   .form-group
     = f.label :birthday
-    = f.date_field :birthday, class: 'form-control'
+    = f.text_field :birthday, class: 'form-control'
   .form-group
     = f.label :location
     = f.text_field :location, class: 'form-control'
@@ -23,3 +23,6 @@ h2 Edit User Profile
     = f.text_field :specialty, class: 'form-control'
   .form-group
     = f.submit 'Submit', class: 'btn btn-primary'
+
+coffee:
+  $('#profile_birthday').datepicker({ format: 'yyyy-mm-dd', language: "zh-CN" })

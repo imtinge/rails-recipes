@@ -4,8 +4,8 @@ html
     title
       | RailsRecipes
     = csrf_meta_tags
-    = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload'
-    = javascript_include_tag 'application', 'data-turbolinks-track': 'reload'
+    = stylesheet_link_tag    'admin', media: 'all'
+    = javascript_include_tag 'admin'
   body
     nav.navbar.navbar-inverse.navbar-fixed-top
       .container
@@ -44,9 +44,11 @@ html
                 = link_to('註冊', new_registration_path(:user))
               li
                 = link_to('登入', new_session_path(:user))
-    .container
-      p.notice
-        = notice
-      p.alert
-        = alert
+    .container style='padding-top: 60px;'
+      - if notice
+        p.notice.alert-success
+          = notice
+      - if alert
+        p.alert.alert-danger
+          = alert
       = yield

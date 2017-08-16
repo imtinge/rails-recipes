@@ -1,4 +1,4 @@
-class Admin::EventTicketsController < ApplicationController
+class Admin::EventTicketsController < AdminController
 
   before_action :find_event
 

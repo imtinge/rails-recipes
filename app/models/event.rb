@@ -11,10 +11,13 @@ class Event < ApplicationRecord
  belongs_to :category, optional: true
  has_many :tickets, dependent: :destroy, inverse_of: :event
  accepts_nested_attributes_for :tickets, allow_destroy: true, reject_if: :all_blank
-
+ has_many :registrations, dependent: :destroy
 
  STATUS = ['draft', 'public', 'private']
  validates :status, inclusion: STATUS
+
+ include RankedModel
+ ranks :row_order
 
  def to_param
    self.friendly_id

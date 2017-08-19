@@ -1,6 +1,50 @@
+script [src='//cdn.bootcss.com/Chart.js/2.5.0/Chart.min.js']
+- if @event.logo.present?
+  = link_to image_tag(@event.logo.url(:thumb)), @event.logo.url, target: '_blank'
 h1 = @event.name
 h2 = t(@event.status, scope: 'event.status')
+- if @event.images.present?
+  - @event.images.each do |i|
+    = link_to image_tag(i.url(:small)), i.url
 h2 = @event.category.try(:name)
+ul
+  - @event.attachments.each do |a|
+    li = link_to a.description, a.attachment.url
 = sanitize @event.description
 p
   = link_to '开始报名', new_event_registration_path(@event), class: 'btn btn-primary'
+canvas#myChart1 [width='400' height='200']
+erb:
+  <script>
+  var ctx1 = document.getElementById("myChart1");
+  var myChart1 = new Chart(ctx1, {
+      type: 'bar',
+      data: <%= raw @data1.to_json %>,
+      options: {
+          scales: {
+              yAxes: [{
+                  ticks: {
+                      beginAtZero:true
+                  }
+              }]
+          }
+      }
+  });
+  </script>
+  <canvas id="myChart2" width="400" height="200"></canvas>
+  <script>
+  var ctx2 = document.getElementById("myChart2");
+  var myChart2 = new Chart(ctx2, {
+      type: 'bar',
+      data: <%= raw @data2.to_json %>,
+      options: {
+          scales: {
+              yAxes: [{
+                  ticks: {
+                      beginAtZero:true
+                  }
+              }]
+          }
+      }
+  });
+  </script>

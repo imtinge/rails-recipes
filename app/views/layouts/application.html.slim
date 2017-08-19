@@ -46,10 +46,10 @@ html
                   = link_to('註冊', new_registration_path(:user))
                 li
                   = link_to('登入', new_session_path(:user))
-      p.notice
-        = notice
-      p.alert
-        = alert
+      - if notice
+        p.notice.alert-success = notice
+      - if alert
+        p.alert.alert-danger = alert
       = yield
       =< link_to '中文', controller: controller_name, action: action_name, locale: 'zh-CN'
       =< link_to 'English', controller: controller_name, action: action_name, locale: 'en'

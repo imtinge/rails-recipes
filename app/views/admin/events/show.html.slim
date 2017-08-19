@@ -1,5 +1,25 @@
+script [src='//cdn.bootcss.com/Chart.js/2.5.0/Chart.min.js']
 h1
   = @event.name
 p
   = link_to "打開前台", event_path(@event), :target => "_blank", :class => "btn btn-primary"
 = sanitize @event.description
+
+erb:
+  <canvas id="myChart3" width="400" height="200"></canvas>
+  <script>
+  var ctx3 = document.getElementById("myChart3");
+  var myChart3 = new Chart(ctx3, {
+      type: 'line',
+      data: <%= raw @data3.to_json %>,
+      options: {
+          scales: {
+              yAxes: [{
+                  ticks: {
+                      beginAtZero:true
+                  }
+              }]
+          }
+      }
+  });
+  </script>

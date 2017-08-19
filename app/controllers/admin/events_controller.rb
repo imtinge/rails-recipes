@@ -1,4 +1,5 @@
 class Admin::EventsController < AdminController
+  before_action :require_editor!
 
   def index
     @events = Event.rank(:row_order).all
@@ -6,11 +7,29 @@ class Admin::EventsController < AdminController
 
   def show
     @event = Event.find_by_friendly_id!(params[:id])
+    if @event.registrations.any?
+      dates = (@event.registrations.order("id ASC").first.created_at.to_date..Date.today).to_a
+      status_colors = { "confirmed" => "#FF6384",
+                        "pending" => "#36A2EB"}
+      @data3 = {
+        labels: dates,
+        datasets: Registration::STATUS.map do |s|
+          {
+            :label => I18n.t(s, :scope => "registration.status"),
+            :data => dates.map{ |d|
+              @event.registrations.by_status(s).where( "created_at >= ? AND created_at <= ?", d.beginning_of_day, d.end_of_day).count
+            },
+            borderColor: status_colors[s]
+          }
+        end
+      }
+    end
   end
 
   def new
     @event = Event.new
     @event.tickets.build
+    @event.attachments.build
   end
 
   def create
@@ -26,6 +45,7 @@ class Admin::EventsController < AdminController
   def edit
     @event = Event.find_by_friendly_id!(params[:id])
     @event.tickets.build if @event.tickets.empty?
+    @event.attachments.build if @event.attachments.empty?
   end
 
   def update
@@ -78,8 +98,8 @@ class Admin::EventsController < AdminController
   protected
 
   def event_params
-    params.require(:event).permit(:name, :description, :friendly_id, :status, :category_id, :tickets_attributes => 
-                                 [:id, :name, :description, :price, :_destroy])
+    params.require(:event).permit(:name, :logo, :remove_logo, :remove_images, :description, :friendly_id, :status, :category_id,
+                                  images: [], tickets_attributes: [:id, :name, :description, :price, :_destroy], attachments_attributes: [:id, :attachment, :description, :_destroy])
   end
 
 end

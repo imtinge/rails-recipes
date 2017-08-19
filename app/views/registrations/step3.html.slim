@@ -1,13 +1,21 @@
 h1 = @event.name
 h2 Step 3
 
+- if @registration.errors.any?
+  ul
+    - @registration.errors.full_messages.each do |error|
+      li = error
+
 = form_for @registration, url: update_step3_event_registration_path(@event, @registration) do |f|
   .form-group
     = f.label :website
     = f.url_field :website, class: 'form-control'
+    .help-block.with-errors
   .form-group
     = f.label :bio
-    = f.text_area :bio, class: 'form-control'
+    = f.text_area :bio, class: 'form-control', required: true
   .form-group
     = link_to 'Previous', step2_event_registration_path(@event, @registration), class: 'btn btn-default'
     = f.submit 'Submit', class: 'btn btn-primary'
+coffee:
+	$('form').validator()

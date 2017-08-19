@@ -1,0 +1,80 @@
+h1
+  => @event.name
+  | / Registrations
+
+p.text-right
+   = link_to 'New Registration', new_admin_event_registration_path(@event), class: 'btn btn-primary'
+   = link_to "Import Registration", admin_event_registration_imports_path(@event), :class => "btn btn-primary"
+
+- if false
+  .submenu
+    .btn-group
+      = link_to "All (#{@event.registrations.size})", admin_event_registrations_path(registration_filters(status: nil)), class: "btn btn-suceess btn-group #{display_status?}"
+      - Registration::STATUS.each do |s|
+        = link_to t(s, scope: 'registration.status') + "(#{@event.registrations.by_status(s).size})", admin_event_registrations_path(registration_filters(status: s)), class: "btn btn-success btn-group #{display_status_active? s}"
+    .btn-group
+      = link_to "All (#{@event.registrations.size})", admin_event_registrations_path(registration_filters(ticket_id: nil)), class: "btn btn-suceess btn-group #{display_ticket_id?}"
+      - @event.tickets.each do |t|
+        = link_to t.name + "(#{@event.registrations.by_ticket(t).size})", admin_event_registrations_path(registration_filters(ticket_id: t.id)), class: "btn btn-success btn-group #{display_status_active? t}"
+
+
+# = form_tag admin_event_registrations_path(@event), method: :get do
+= search_form_for @q, url: admin_event_registrations_path(@event) do |f|
+  p
+    = f.search_field :name_cont, placeholder: 'name', class: 'form-control'
+  p
+    = f.search_field :email_cont, placeholder: 'email', class: 'form-control'
+  p
+    = text_field_tag :registration_id, params[:registration_id], placeholder: '报名编号， 可用“，”分隔'
+  p
+    - Registration::STATUS.each do |s|
+      label
+        = check_box_tag 'statuses[]', s, Array(params[:statuses]).include?(s)
+        = t(s, scope: 'registration.status') + "(#{@event.registrations.by_status(s).size})"
+  p
+    - @event.tickets.each do |t|
+      label
+        = check_box_tag 'ticket_ids[]', t.id, Array(params[:ticket_ids]).include?(t.id.to_s)
+        = t.name + "(#{@event.registrations.where(ticket_id: t.id).size}"
+
+  p
+    | date
+    =< date_field_tag :start_on, params[:start_on]
+    =< date_field_tag :end_on, params[:end_on]
+
+  p.text-right
+    = submit_tag 'Send', class: 'btn btn-primary'
+
+table.table
+  thead
+    tr
+      th ID
+      th Ticket
+      th Name
+      th Status
+      th E-mail
+      th 建立时间
+      th Actions
+  tbody
+    - @registrations.each do |registration|
+      tr
+        td = registration.id
+        td = registration.ticket.name
+        td = registration.name
+        td = t(registration.status, scope: 'registration.status')
+        td = registration.email
+        td = registration.created_at
+        td
+          = link_to 'Edit', edit_admin_event_registration_path(@event, registration), class: 'btn btn-default'
+          = link_to 'Delete', admin_event_registration_path(@event, registration), method: :delete, data: { confirm: 'Are you sure?' },
+          class: 'btn btn-default'
+= paginate @registrations
+p
+  = link_to 'export CSV', admin_event_registrations_path(format: :csv), class: 'btn btn-default'
+  = link_to "汇出 Excel", admin_event_registrations_path(:format => :xlsx), :class => "btn btn-default"
+hr
+= form_tag import_admin_event_registrations_path(@event), :multipart => true do
+  p
+    = file_field_tag "csv_file"
+  p
+    = submit_tag "汇入CSV", :class => "btn btn-danger"

@@ -18,9 +18,9 @@
   => f.label :status
   .btn-group [data-toggle='buttons']
     - Event::STATUS.each do |status|
-      | <label class="btn btn-default 
+      | <label class="btn btn-default
       = (status == f.object.status) ? 'active' : ''
-      | "> 
+      | ">
       = f.radio_button :status, status
       = t(status, scope: 'event.status')
       | </label>
@@ -28,9 +28,38 @@
   = f.label :category_id
   = f.select :category_id, Category.all.map{ |c| [c.name, c.id] }, {}, class: 'form-control'
 .form-group
+  = f.label :logo
+  = f.file_field :logo, class: 'form-control'
+  - if f.object.logo.present?
+    label
+      = f.check_box :remove_logo
+    = link_to f.object.logo.filename, f.object.logo.url, target: '_blank'
+.form-group
+  = f.label :images
+  = f.file_field :images, multiple: true, class: 'form-control'
+  - if f.object.images.present?
+    label
+      = f.check_box :remove_images
+    - f.object.images.each do |i|
+      = link_to i.filename, i.url, target: '_blank'
+.form-group
   = f.label :description
   = f.cktext_area :description, ckeditor: { language: 'zh-CN' }
-
+= f.nested_fields_for :attachments do |ff|
+  fieldset [style='border-left: 5px solid #bbb; margin-bottom: 10px, padding: 10px;']
+    legend Attachment
+    .form-group
+      = ff.label :attachment
+      = ff.file_field :attachment, class: 'form-control'
+      - if ff.object.attachment.present?
+        | has_uploaded
+        =< link_to ff.object.description, ff.object.attachment.url, target: '_blank'
+    .form-group
+      = ff.label :description
+      = ff.text_field :description, class: 'form-control'
+    = ff.remove_nested_fields_link 'remove this document', class: 'btn btn-danger'
+p.text-right
+  = f.add_nested_fields_link :attachments, 'add document', class: 'btn btn-default'
 = f.nested_fields_for :tickets do |ff|
   fieldset[style='border-left: 5px solid #bbb; margin-bottom: 10px; padding: 10px;']
     legend Ticket

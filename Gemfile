@@ -47,6 +47,16 @@ gem 'bootstrap-datepicker-rails'
 gem 'ckeditor'
 gem 'ranked-model'
 gem 'jquery-ui-rails'
+gem 'kaminari'
+gem 'ransack'
+gem 'carrierwave'
+gem 'mini_magick'
+gem 'paper_trail'
+gem 'rubyzip'
+gem 'axlsx'
+gem 'axlsx_rails'
+gem 'premailer-rails'
+gem 'sidekiq'
 
 group :development, :test do
   gem 'rspec-rails'
@@ -56,6 +66,7 @@ end
 
 group :development do
   gem 'faker'
+  gem 'letter_opener'
 
   # Access an IRB console on exception pages or by using <%= console %> anywhere in the code.
   gem 'web-console', '>= 3.3.0'

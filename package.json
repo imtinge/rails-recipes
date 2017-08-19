@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "bootstrap-validator": "^0.11.9"
+  }
+}
